@@ -50,7 +50,7 @@ import DataService from "../services/AlleVeranstaltungen.service";
                         <td>{Dauer}</td>
                         <td>{V_Beschreibung}</td>
                         <td>{Dozent}</td>
-                        <td>{TE_Preis}</td>
+                        <td>{TE_Preis} €</td>
                         <td>{Zugangsart}</td>
                         <td>{maxTE_Zahl}</td>
                     </tr>

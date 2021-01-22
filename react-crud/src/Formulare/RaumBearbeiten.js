@@ -117,7 +117,7 @@ export class RaumBearbeiten extends React.Component {
 
         return (
             <div className="RaumBearbeiten">
-                <header className="RaumBearbeiten-header">
+                <header className="App-header">
                     <Form>
 
                         <Form.Group controlId="kapazitaet">
@@ -152,7 +152,7 @@ export class RaumBearbeiten extends React.Component {
                         </Form.Group>
 
                         <Button href="/Räume" variant="success" type="submit" onClick={() => {this.updateRaum(); alert("Raum erfolgreich bearbeitet!")}}>
-                            Raum bearbeiten
+                            Bearbeiten
                         </Button>
                         <Button href="/Räume" variant="danger" type="submit">
                             Abbrechen

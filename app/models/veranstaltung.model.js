@@ -51,7 +51,7 @@ Veranstaltung.findById = (VeranstaltungID, result) => {
 };
 
 Veranstaltung.getAll = result => {
-    connection.query("SELECT * FROM Veranstaltung", (err, res) => {
+    connection.query("SELECT * FROM Veranstaltung INNER JOIN Raum ON Veranstaltung.RaumID = Raum.RaumID INNER JOIN User ON Veranstaltung.UserID = User.UserID", (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(null, err);
