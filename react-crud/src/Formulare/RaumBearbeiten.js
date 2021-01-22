@@ -154,9 +154,6 @@ export class RaumBearbeiten extends React.Component {
                         <Button href="/Räume" variant="success" type="submit" onClick={() => {this.updateRaum(); alert("Raum erfolgreich bearbeitet!")}}>
                             Raum bearbeiten
                         </Button>
-                        <tr>
-                            <td></td>
-                        </tr>
                         <Button href="/Räume" variant="danger" type="submit">
                             Abbrechen
                         </Button>
