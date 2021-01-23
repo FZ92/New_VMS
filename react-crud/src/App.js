@@ -54,7 +54,7 @@ export default class App extends React.Component{
         currentUser: AuthService.getCurrentUser(),
         showAdminBoard: res.Rolle.includes("Admin"),
         showManagementBoard: res.Rolle.includes("Management"),
-        showVeranstalterBoard: res.Rolle.includes("Veranstalter"),
+        showVeranstalterBoard: res.Rolle.includes("Veranstaltungsanbieter"),
         showTeilnehmerBoard: res.Rolle.includes("Teilnehmer"),
       });
     }
@@ -120,11 +120,8 @@ export default class App extends React.Component{
                     <NavDropdown.Item href="/Anfragenerstellung">Anfrage stellen</NavDropdown.Item>
                   </NavDropdown></div>)}
                   {showVeranstalterBoard && (<Nav.Link href="/Angebotverwaltung">Angebotverwaltung</Nav.Link>)}
-                  {showVeranstalterBoard && (<div><NavDropdown title="Veranstaltungsverwaltung" id="basic-nav-dropdown">
-                    <NavDropdown.Item href="/Veranstaltungsverwaltung">Veranstaltungen verwalten</NavDropdown.Item>
-                    <NavDropdown.Item href="/VeranstaltungAnlegen">Veranstaltung anlegen</NavDropdown.Item>
-                  </NavDropdown></div>)}
-                  {showVeranstalterBoard && (<Nav.Link href="/BoardVeranstalter">BoardVeranstalter</Nav.Link>)}
+                  {showVeranstalterBoard && (<Nav.Link href="Veranstaltungsverwaltung"> Veranstaltungsverwaltung </Nav.Link>)}
+
 
                   {currentUser ? (
                       <div></div>
@@ -173,7 +170,7 @@ export default class App extends React.Component{
               {(showAdminBoard || showManagementBoard) && ( <Route exact path="/VeranstaltungBearbeiten/:VeranstaltungID" component={VeranstaltungBearbeiten}/>)}
               {(showAdminBoard || showManagementBoard) && ( <Route exact path="/VeranstaltungAnlegen" component={VeranstaltungAnlegen}/> )}
               {(showVeranstalterBoard || showTeilnehmerBoard) && ( <Route exact path="/Profil" component={Profil}/>)}
-              <Route exact path="/BoardVeranstalter">{BoardVeranstalter}</Route>
+
             </Switch>
 
 
