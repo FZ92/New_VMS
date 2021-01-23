@@ -31,6 +31,7 @@ import BoardVeranstalter from "./Pages/BoardVeranstalter";
 import BoardTeilnehmer from "./Pages/BoardTeilnehmer";
 import Angebotverwaltung from "./Tabelle/Angebotverwaltung";
 import VeranstaltungsverwaltungVeranstalter from "./Tabelle/VeranstaltungsverwaltungVeranstalter";
+import AnfrageAnnehmen from "./Formulare/AnfrageAnnehmen";
 
 
 export default class App extends React.Component{
@@ -159,6 +160,7 @@ export default class App extends React.Component{
               {(showAdminBoard || showManagementBoard || showVeranstalterBoard) && (<Route exact path="/Anfragenverwaltung" component={Anfragen} />)}
               {(showVeranstalterBoard) && (<Route exact path="/Angebotverwaltung" component={Angebotverwaltung} />)}
               {(showAdminBoard || showManagementBoard) && (<Route exact path="/Veranstaltungsverwaltung" component={Veranstaltungsverwaltung} />)}
+              {(showAdminBoard || showManagementBoard) && (<Route exact path="/AnfrageAnnehmen/:AnfrageID" component={AnfrageAnnehmen} />)}
               {(showAdminBoard) && (<Route exact path="/Benutzerverwaltung" component={Benutzerverwaltung} />)}
               {(showAdminBoard) && (<Route exact path="/BenutzerBearbeiten/:UserID" component={BenutzerBearbeiten} />)}
               {(showAdminBoard) && (<Route exact path="/BenutzerAnlegen" component={BenutzerAnlegen} />)}

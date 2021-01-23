@@ -54,10 +54,10 @@ export class Anfragen extends React.Component {
 
     setActiveAnfrage(anfrage, index) {
         this.setState({
-            currentUser: anfrage,
+            currentAnfrage: anfrage,
             currentIndex: index
         });
-        this.props.history.push("/AnfrageBearbeiten/" + anfrage.AnfrageID)
+        this.props.history.push("/AnfrageAnnehmen/" + anfrage.AnfrageID)
     }
 
     warnungAblehnen(anfrageAblehnen) {
@@ -66,6 +66,15 @@ export class Anfragen extends React.Component {
             window.location.reload(false)
         } else {
             this.ablehnen(anfrageAblehnen);
+        }
+    }
+
+    warnungAnnehmen(anfrageAnnehmen) {
+        const check = window.confirm('Anfrage wirklich annehmen? Es besteht keine Möglichkeit die Anfrage dann abzulehnen!');
+        if (check === false) {
+            window.location.reload(false)
+        } else {
+            this.setActiveAnfrage(anfrageAnnehmen);
         }
     }
 
@@ -105,7 +114,9 @@ export class Anfragen extends React.Component {
                                 <td>{anfrage.Zusatzleistungen}</td>
                                 <td>{this.setBarrierefreiheit(anfrage, index)}</td>
                                 <td>{anfrage.Vorname} {anfrage.Nachname}</td>
-                                <td><Button variant="success">Annehmen</Button></td>
+                                <td><Button variant="success" types="submit" onClick={() => {
+                                    this.warnungAnnehmen(anfrage); window.location.reload(false)
+                                }}>Annehmen</Button></td>
                                 <td><Button variant="primary">Gegenangebot</Button></td>
                                 <td><Button variant="danger" type="submit" onClick={() => {
                                     this.warnungAblehnen(anfrage); window.location.reload(false)}}>Ablehnen</Button>

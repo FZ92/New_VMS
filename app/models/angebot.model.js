@@ -3,24 +3,23 @@ const connection = require("./index");
 
 // constructor
 const Angebot = function(angebot) {
-    this.a_preis = angebot.a_preis;
-    this.leistung = angebot.leistung;
-    this.userID = angebot.userID;
-    this.veranstaltungID = angebot.veranstaltungID;
-    this.anfrageID = angebot.anfrageID;
-    this.active = angebot.active;
+    this.A_Preis = angebot.A_Preis;
+    this.Leistung = angebot.Leistung;
+    this.UserID = angebot.UserID;
+    this.VeranstaltungID = angebot.VeranstaltungID;
+    this.AnfrageID = angebot.AnfrageID;
 };
 
 Angebot.create = (newAngebot, result) => {
-    connection.query("INSERT INTO Angebot SET ? ", newAngebot, (err, res) => {
+    connection.query("INSERT INTO Angebot SET ?", newAngebot, (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(err, null);
             return;
         }
 
-        console.log("created Angebot: ", { id: res.insertId, ...newAngebot });
-        result(null, { id: res.insertId, ...newAngebot });
+        console.log("created Angebot: ", { AngebotID: res.insertId, ...newAngebot });
+        result(null, { AngebotID: res.insertId, ...newAngebot });
     });
 };
 

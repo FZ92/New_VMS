@@ -1,42 +1,216 @@
 import React from 'react';
-import './Anfragenerstellung.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import {InputGroup} from "react-bootstrap";
-import DataService from "../services/anfrage.service";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import DataService from "../services/anfrage.service";
+import UserService from "../services/user.service";
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
+import AuthService from "../services/auth.service";
+
+
+const required = value => {
+    if(!value) {
+        return(
+            <div className="alert alert-danger" role="alert">
+                Pflichtfeld!
+            </div>
+        );
+    }
+};
+
+const Bezeichnung = value => {
+    if (value.length < 2 || value.length > 30) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                Bezeichnung muss zwischen 2 und 30 Zeichen lang sein
+            </div>
+        );
+    }
+};
+
+const Startdatum = value => {
+    if (value === null) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                Bitte ein Startdatum angeben!
+            </div>
+        );
+    }
+};
+
+const Enddatum = value => {
+    if (value === null) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                Bitte ein Enddatum angeben!
+            </div>
+        );
+    }
+};
+
+const Teilnehmerzahl = value => {
+    if (value.length < 1 || value.length > 3000) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                Teilnehmerzahl muss zwischen 1 und 3000 sein
+            </div>
+        );
+    }
+};
+
+const Zusatzleistungen = value => {
+    if(value.length < 0) {
+        return(
+        <div>
+        Bitte Zusatzleistungen wie z. B. Beamer, etc. eintragen. Bei keiner gewünschten Leistung "Nein" eintragen;
+        </div>
+        )
+    }
+
+}
+
+const Zugang = value => {
+    if (value !== ("Offen" && "Geschlossen")) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                Bitte Zugangsart Offen oder Geschlossen eingeben
+            </div>
+        );
+    }
+};
+
+const Kosten = value => {
+    if (value < 0) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                Bei kostenloser Veranstaltung bitte 0 eintragen!
+            </div>
+        );
+    }
+};
+
+const Barrierefreiheit = value => {
+    if (value !== ("0" && "1")) {
+        return (
+            <div className="alert alert-danger" role="alert">
+                Bitte 1 für barrierefrei oder 0 für nicht barrierefrei angeben
+            </div>
+        );
+    }
+};
 
 // Erstellung einer Anfrage
 export class Anfragenerstellung extends React.Component {
 
     constructor(props) {
         super(props);
+        this.handleRegister = this.handleRegister.bind(this);
+        this.onChangeBezeichnung = this.onChangeBezeichnung.bind(this);
+        this.onChangeStartdatum = this.onChangeStartdatum.bind(this);
+        this.onChangeEnddatum = this.onChangeEnddatum.bind(this);
+        this.onChangeTeilnehmerzahl = this.onChangeTeilnehmerzahl.bind(this);
+        this.onChangeZusatzleistungen = this.onChangeZusatzleistungen.bind(this);
+        this.onChangeZugang = this.onChangeZugang.bind(this);
+        this.onChangeKosten = this.onChangeKosten.bind(this);
+        this.onChangeBarrierefreiheit = this.onChangeBarrierefreiheit.bind(this);
+
+
         this.state = {
             Bezeichnung: "",
             Startdatum: "",
             Enddatum: "",
             Teilnehmerzahl: "",
             Zusatzleistungen: "",
-            Zugang: "offen",
+            Zugang: "",
             Kosten: "",
-            Barrierefreiheit: "0",
-            UserID: 1
+            Barrierefreiheit: "",
+            UserID: "",
+            successful: false,
+            message: ""
+        };
+
+        this.state2 = {
+            currentUser: AuthService.getCurrentUser()
         };
     }
-    doAnfrageErstellen = () => {
-        console.log(this.state.Bezeichnung);
-        const data = {
-            Bezeichnung: this.state.Bezeichnung,
-            Startdatum: this.state.Startdatum,
-            Enddatum: this.state.Enddatum,
-            Teilnehmerzahl: this.state.Teilnehmerzahl,
-            Zusatzleistungen: this.state.Zusatzleistungen,
-            Zugang: this.state.Zugang,
-            Kosten: this.state.Kosten,
-            Barrierefreiheit: this.state.Barrierefreiheit,
-            UserID: this.state.UserID
-        };
+
+    onChangeBezeichnung(e) {
+        this.setState({
+            Bezeichnung: e.target.value
+        });
+    }
+
+    onChangeStartdatum(e) {
+        this.setState({
+            Startdatum: e.target.value
+        });
+    }
+
+    onChangeEnddatum(e) {
+        this.setState({
+            Enddatum: e.target.value
+        });
+    }
+
+    onChangeTeilnehmerzahl(e) {
+        this.setState({
+            Teilnehmerzahl: e.target.value
+        });
+    }
+
+    onChangeZusatzleistungen(e) {
+        this.setState({
+            Zusatzleistungen: e.target.value
+        });
+    }
+
+    onChangeZugang(e) {
+        this.setState({
+            Zugang: e.target.value
+        });
+    }
+
+    onChangeKosten(e) {
+        this.setState({
+            Kosten: e.target.value
+        });
+    }
+
+    onChangeBarrierefreiheit(e) {
+        this.setState({
+            Barrierefreiheit: e.target.value
+        });
+    }
+
+    componentDidMount() {
+
+    }
+
+
+
+        handleRegister(e) {
+            e.preventDefault();
+            this.setState({
+                message: "",
+                successful: false
+            });
+
+            this.form.validateAll();
+
+            if (this.checkBtn.context._errors.length === 0) {
+                const data = {
+                    Bezeichnung: this.state.Bezeichnung,
+                    Startdatum: this.state.Startdatum,
+                    Enddatum: this.state.Enddatum,
+                    Teilnehmerzahl: this.state.Teilnehmerzahl,
+                    Zusatzleistungen: this.state.Zusatzleistungen,
+                    Zugang: this.state.Zugang,
+                    Kosten: this.state.Kosten,
+                    Barrierefreiheit: this.state.Barrierefreiheit,
+                    UserID: this.state2.currentUser.UserID
+                };
 
         DataService.create(data)
             .then(response => {
@@ -49,95 +223,175 @@ export class Anfragenerstellung extends React.Component {
                     Zugang: response.data.Zugang,
                     Kosten: response.data.Kosten,
                     Barrierefreiheit: response.data.Barrierefreiheit,
-                    UserID: response.data.UserID
+                    UserID: response.data.UserID,
+                    message: response.data.message,
+                    successful: true
                 });
                 console.log(response.data);
             })
             .catch(e => {
                 console.log(e);
-            });
-    }
-    changeBezeichnungHandler= (event) => {
-        this.setState({Bezeichnung: event.target.value});
-    }
+                const resMessage =
+                    (e.response &&
+                        e.response.data &&
+                        e.response.data.message) ||
+                    e.message ||
+                    e.toString();
+                this.setState({
+                    successful: false,
+                    message: resMessage
+                })
+            })
+                alert("Anfrage erfolgreich erstellt!")
+                this.props.history.push("/Anfragenverwaltung/")}
+        }
+
 
 
 
     render() {
-
         return (
-            <div className="Anfragenerstellung">
-            <header className="App-header">
-                <h2>Seminaranfrage erstellen</h2>
+            <div className="col-md-12">
+                <div className="card card-container">
+                    <Form
+                        onSubmit={this.handleRegister}
+                        ref={c => {
+                            this.form = c;
+                        }}
+                    >
+                        {!this.state.successful && (
+                            <div>
+                                <div className="form-group">
+                                    <label htmlFor="Bezeichnung">Bezeichnung</label>
+                                    <Input
+                                        type="text"
+                                        className="form-control"
+                                        name="Bezeichnung"
+                                        value={this.state.Bezeichnung}
+                                        onChange={this.onChangeBezeichnung}
+                                        validations={[required, Bezeichnung]}
+                                    />
+                                </div>
 
-                <Form>
-                    <Form.Group controlId="bezeichnung">
-                        <Form.Label>Bezeichnung</Form.Label>
-                        <Form.Control type="text" value={this.state.Bezeichnung} placeholder="Seminarname eingeben" onChange={e => this.setState({ Bezeichnung: e.target.value })} />
-                    </Form.Group>
+                                <div className="form-group">
+                                    <label htmlFor="Startdatum">Startdatum</label>
+                                    <Input
+                                        type="date"
+                                        className="form-control"
+                                        name="enddatum"
+                                        value={this.state.Startdatum}
+                                        onChange={this.onChangeStartdatum}
+                                        validations={[required, Startdatum]}
+                                    />
+                                </div>
 
-                    <Form.Group controlId="startdatum">
-                        <Form.Label>Startdatum</Form.Label>
-                        <Form.Control type="date" placeholder="Startdatum" value={this.state.Startdatum} onChange={e => this.setState({ Startdatum: e.target.value })}/>
-                    </Form.Group>
+                                <div className="form-group">
+                                    <label htmlFor="Enddatum">Startdatum</label>
+                                    <Input
+                                        type="date"
+                                        className="form-control"
+                                        name="enddatum"
+                                        value={this.state.Enddatum}
+                                        onChange={this.onChangeEnddatum}
+                                        validations={[required, Enddatum]}
+                                    />
+                                </div>
 
-                    <Form.Group controlId="enddatum">
-                        <Form.Label>Enddatum</Form.Label>
-                        <Form.Control type="date" placeholder="Enddatum" value={this.state.Enddatum} onChange={e => this.setState({ Enddatum: e.target.value })}/>
-                    </Form.Group>
 
-                    <Form.Group controlId="teilnehmerzahl">
-                        <Form.Label>Teilnehmerzahl</Form.Label>
-                        <Form.Control type="number" min="1" max="10000" placeholder="maximale Teilnehmerzahl, wie z.B. 60 " value={this.state.Teilnehmerzahl} onChange={e => this.setState({ Teilnehmerzahl: e.target.value })}/>
-                    </Form.Group>
+                                <div className="form-group">
+                                    <label htmlFor="teilnehmerzahl">Teilnehmerzahl</label>
+                                    <Input
+                                        type="text"
+                                        className="form-control"
+                                        name="teilnehmerzahl"
+                                        value={this.state.Teilnehmerzahl}
+                                        onChange={this.onChangeTeilnehmerzahl}
+                                        validations={[required, Teilnehmerzahl]}
+                                    />
+                                </div>
 
-                    <Form.Group controlId="zusatzleistungen">
-                        <Form.Label>Zusatzleitsungen</Form.Label>
-                        <Form.Control as="textarea" rows={5} placeholder="Zusatzleistungen, wie z.B. Beamer, Whiteboard etc." value={this.state.Zusatzleistungen}  onChange={e => this.setState({ Zusatzleistungen: e.target.value })}/>
-                    </Form.Group>
+                                <div className="form-group">
+                                    <label htmlFor="zusatzleistungen">Zusatzleistungen</label>
+                                    <Input
+                                        type="text"
+                                        className="form-control"
+                                        name="zusatzleistung"
+                                        value={this.state.Zusatzleistungen}
+                                        onChange={this.onChangeZusatzleistungen}
+                                        validations={[required, Zusatzleistungen]}
+                                    />
+                                </div>
 
-                    <Form.Group controlId="zugang">
-                        <Form.Label>Zugangsart wählen</Form.Label>
-                        <Form.Control as="select" value={this.state.Zugang}  onChange={e => this.setState({ Zugang: e.target.value })}>
-                            <option value="offen">offen für beliebige Teilnehmer</option>
-                            <option value="geschlossen">nur für Personen der Teilnehmerliste</option>
-                        </Form.Control>
-                    </Form.Group>
+                                <div className="form-group">
+                                    <label htmlFor="zugang">Zugang</label>
+                                    <Input
+                                        type="text"
+                                        className="form-control"
+                                        name="zugang"
+                                        value={this.state.Zugang}
+                                        onChange={this.onChangeZugang}
+                                        validations={[required, Zugang]}
+                                    />
+                                </div>
 
-                    <Form.Group controlId="kosten">
-                        <Form.Label>Teilnahmekosten pro Person</Form.Label>
-                        <InputGroup className="mb-2">
-                        <Form.Control type="number" min="0" max="100000" onkeypress="return event.charCode >= 48" onkeyup="if(this.value<0){this.value= this.value * -1}" placeholder="0.00" onChange={e => this.setState({ Kosten: e.target.value })} value={this.state.Kosten}/>
-                            <InputGroup.Append>
-                                <InputGroup.Text>€</InputGroup.Text>
-                            </InputGroup.Append>
-                        </InputGroup>
-                    </Form.Group>
+                                <div className="form-group">
+                                    <label htmlFor="kosten">Kosten</label>
+                                    <Input
+                                        type="text"
+                                        className="form-control"
+                                        name="kosten"
+                                        value={this.state.Kosten}
+                                        onChange={this.onChangeKosten}
+                                        validations={[required, Kosten]}
+                                    />
+                                </div>
 
-                    <Form.Group controlId="barrierefreiheit">
-                        <Form.Label>Barrierefreiheit</Form.Label>
-                        <Form.Control as="select" value={this.state.Barrierefreiheit}  onChange={e => this.setState({ Barrierefreiheit: e.target.value })}>
-                            <option value= {0}>nicht barrierefrei</option>
-                            <option value= {1}>barrierefrei</option>
-                        </Form.Control>
+                                <div className="form-group">
+                                    <label htmlFor="barrierefreiheit">Barrierefreiheit</label>
+                                    <Input
+                                        type="text"
+                                        className="form-control"
+                                        name="barrierefreiheit"
+                                        value={this.state.Barrierefreiheit}
+                                        onChange={this.onChangeBarrierefreiheit}
+                                        validations={[required, Barrierefreiheit]}
+                                    />
+                                </div>
 
-                    </Form.Group>
 
-                        <Button href="/" variant="success" type="submit" onClick={() => {this.doAnfrageErstellen();alert("Anfrage erfolgreich gestellt! Sie erhalten in Kürze eine Antwort!")}}>
-                            Absenden
-                        </Button>
-                    <tr>
-                        <td></td>
-                    </tr>
-                        <Button href="/" variant="danger" type="submit" onClick={() => {alert("Anfragenerstellung abgebrochen! Sie werden zur Startseite weitergeleitet!")}}>
-                            Abbrechen
-                        </Button>
 
-                </Form>
-            </header>
+                                <div className="form-group">
+                                    <button className="btn btn-primary btn-block">Anfrage stellen</button>
+                                </div>
+                            </div>
+                        )}
+
+                        {this.state.message && (
+                            <div className="form-group">
+                                <div
+                                    className={
+                                        this.state.successful
+                                            ? "alert alert-success"
+                                            : "alert alert-danger"
+                                    }
+                                    role="alert"
+                                >
+                                    {this.state.message}
+                                </div>
+                            </div>
+                        )}
+                        <CheckButton
+                            style={{ display: "none" }}
+                            ref={c => {
+                                this.checkBtn = c;
+                            }}
+                        />
+                    </Form>
+                </div>
             </div>
         );
     }
+
 }
 
 export default Anfragenerstellung;
