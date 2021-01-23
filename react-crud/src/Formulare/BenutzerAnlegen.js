@@ -172,7 +172,7 @@ const required = value => {
 };
 
 const Rolle = value => {
-    if (value !== ("Admin" || "Management" || "Veranstaltungsanbieter" || "Teilnehmer")) {
+    if (value !== ( "Teilnehmer" && "Management" && "Veranstaltungsanbieter" && "Admin")) {
         return (
             <div className="alert alert-danger" role="alert">
                 Rolle muss Admin, Management, Veranstaltungsanbieter oder Teilnehmer sein!
@@ -430,7 +430,8 @@ export class BenutzerAnlegen extends React.Component {
 
                     })
                 })
-        }
+            alert("Benutzer erfolgreich angelegt!")
+            this.props.history.push("/Benutzerverwaltung/")}
     }
 
 

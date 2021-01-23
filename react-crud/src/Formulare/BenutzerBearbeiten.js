@@ -250,8 +250,6 @@ export class BenutzerBearbeiten extends React.Component {
 
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import DataService from "../services/user.service";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
@@ -398,107 +396,107 @@ export class BenutzerBearbeiten extends React.Component {
 
     onChangeVorname(e) {
         const Vorname = e.target.value;
-        this.setState({function(prevState) {
+        this.setState(function(prevState) {
             return {
                 currentUser: {
                     ...prevState.currentUser,
                     Vorname: Vorname
                 }
             }
-            }
+
         });
     }
 
     onChangeNachname(e) {
         const Nachname = e.target.value;
-        this.setState({function(prevState) {
+        this.setState(function(prevState) {
                 return {
                     currentUser: {
                         ...prevState.currentUser,
                         Nachname: Nachname
                     }
                 }
-            }
+
         });
     }
 
 
     onChangeEmail(e) {
         const Email = e.target.value;
-        this.setState({function(prevState) {
+        this.setState(function(prevState) {
                 return {
                     currentUser: {
                         ...prevState.currentUser,
                         Email: Email
                     }
                 }
-            }
+
         });
     }
 
     onChangeOrt(e) {
         const Ort = e.target.value;
-        this.setState({function(prevState) {
+        this.setState(function(prevState) {
                 return {
                     currentUser: {
                         ...prevState.currentUser,
                         Ort: Ort
                     }
                 }
-            }
+
         });
     }
 
     onChangePLZ(e) {
         const PLZ = e.target.value;
-        this.setState({function(prevState) {
+        this.setState(function(prevState) {
                 return {
                     currentUser: {
                         ...prevState.currentUser,
                         PLZ: PLZ
                     }
                 }
-            }
+
         });
     }
 
     onChangeStrasse(e) {
         const Strasse = e.target.value;
-        this.setState({function(prevState) {
+        this.setState(function(prevState) {
                 return {
                     currentUser: {
                         ...prevState.currentUser,
                         Strasse: Strasse
                     }
                 }
-            }
+
         });
     }
 
     onChangeTelefonnummer(e) {
         const Telefonnummer = e.target.value;
-        this.setState({function(prevState) {
+        this.setState(function(prevState) {
                 return {
                     currentUser: {
                         ...prevState.currentUser,
                         Telefonnummer: Telefonnummer
                     }
                 }
-            }
+
         });
     }
 
 
     onChangeFirma(e) {
         const Firma = e.target.value;
-        this.setState({function(prevState) {
+        this.setState(function(prevState) {
                 return {
                     currentUser: {
                         ...prevState.currentUser,
                         Firma: Firma
                     }
                 }
-            }
+
         });
     }
 
@@ -525,49 +523,28 @@ export class BenutzerBearbeiten extends React.Component {
         this.form.validateAll();
 
         if (this.checkBtn.context._errors.length === 0) {
-            const data = {
-                Firma: this.state.currentUser.Firma,
-                Passwort: this.state.currentUser.Passwort,
-                Vorname: this.state.currentUser.Vorname,
-                Nachname: this.state.currentUser.Nachname,
-                Email: this.state.currentUser.Email,
-                Ort: this.state.currentUser.Ort,
-                PLZ: this.state.currentUser.PLZ,
-                Strasse: this.state.currentUser.Strasse,
-                Telefonnummer: this.state.currentUser.Telefonnummer,
-            };
 
-            DataService.update(this.state.currentUser.UserID, data)
+
+
+            DataService.update(this.state.currentUser.UserID, this.state.currentUser)
                 .then(response => {
                     console.log(response.data);
                     this.setState({
                         message: "The User was updated successfully!"
                     });
-                    console.log(response.data);
                 })
                 .catch(e => {
                     console.log(e);
 
                 })
+            alert("Benutzer erfolgreich bearbeitet!")
+            this.props.history.push("/Benutzerverwaltung/")
 
         }
     }
 
 
-    /*doUpdate() {
-        DataService.update(this.state.currentUser.UserID, this.state.currentUser)
-            .then(response => {
-                    console.log(response.data);
-                    this.setState({
-                        message: "The User was updated successfully!"
-                });
-                console.log(response.data);
-            })
-            .catch(e => {
-                console.log(e);
 
-            })
-    }*/
 
 
     render() {

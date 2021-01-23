@@ -29,7 +29,7 @@ class DataService {
     }
 
     getTeilnehmerBoard() {
-        return http.get('/Teilnehmer', { headers: authHeader() });
+        return http.get('/Teilnehmer', );
     }
 
     getVeranstalterBoard() {
